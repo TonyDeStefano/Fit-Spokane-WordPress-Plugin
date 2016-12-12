@@ -1,0 +1,158 @@
+#kitchen-rescue-pak-landing,
+#kitchen-rescue-thanks {
+    width: 850px;
+    margin: 0 auto;
+}
+
+#kitchen-rescue-thanks .thanks-top {
+    background: #00bae6;
+    text-align: center;
+    text-transform: capitalize;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+#kitchen-rescue-thanks .thanks-hero {
+    background: #333;
+}
+
+#kitchen-rescue-thanks .thanks-hero .col {
+    padding: 25px;
+}
+
+#kitchen-rescue-thanks .thanks-hero .col-sm-5 {
+    text-align: center;
+}
+
+#kitchen-rescue-thanks .thanks-hero img {
+    width: 250px;
+    height: 250px;
+    border-radius: 125px;
+    box-shadow: 0 0 20px #000
+}
+
+#kitchen-rescue-thanks .thanks-hero h2 {
+    color: #00bae6;
+    font-size: 24px !important;
+}
+
+#kitchen-rescue-thanks .thanks-hero p {
+    color: #FFF;
+}
+
+#kitchen-rescue-thanks .thanks-info {
+    margin-top: 30px;
+}
+
+#kitchen-rescue-thanks .thanks-info h2 {
+    margin-top: 0;
+    font-size: 36px !important;
+    font-weight: normal;
+}
+
+#kitchen-rescue-pak-landing .landing-top {
+    height: 350px;
+    background: url('../img/how-to-create-the-perfect-meal.png') no-repeat right 50px bottom #333;
+}
+
+p.pak-head {
+    font-size: 36px !important;
+    line-height: 40px !important;
+    color: #FFF;
+    font-weight: bold;
+    padding: 30px !important;
+    width: 50%;
+    margin: 0 !important;
+}
+
+p.pak-head strong {
+    color: #00bae6;
+    font-weight: bold;
+}
+
+p.pak-head small {
+    color: #fff;
+    font-size: 16px !important;
+    line-height: 10px !important;
+    font-weight: normal;
+}
+
+#kitchen-rescue-pak-landing .landing-bottom {
+    position: relative;
+    width: 100%;
+    height: 350px;
+}
+
+#kitchen-rescue-pak-landing .landing-bottom #landing-arrow {
+    background: url('../img/blue-arrow.png');
+    width: 70px;
+    height: 125px;
+    top: -120px;
+    left: 270px;
+    position: absolute;
+}
+
+#kitchen-rescue-pak-landing .landing-bottom .landing-form {
+    position: absolute;
+    top: -50px;
+    left: 50px;
+    background: #00bae6;
+    border-radius: 3px;
+    width: 220px;
+    padding: 15px;
+    box-shadow: 0 8px 6px -6px #333;
+}
+
+#kitchen-rescue-pak-landing .landing-bottom .landing-form label {
+    color: #FFF;
+}
+
+#kitchen-rescue-pak-landing .landing-bottom .landing-form input.text-input {
+    border: 0;
+    border-radius: 2px;
+    display: block;
+    font-size: 20px;
+    padding: 2px;
+    width: 100%;
+}
+
+#kitchen-rescue-pak-landing .landing-bottom .landing-checkmarks {
+    position: absolute;
+    left: 330px;
+    width: 450px;
+    padding-top: 30px;
+}
+
+.landing-checkmarks .row {
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 800px) {
+
+    #kitchen-rescue-pak-landing {
+        width: 100%;
+    }
+
+    p.pak-head {
+        width: 100%;
+    }
+
+    #kitchen-rescue-pak-landing .landing-bottom #landing-arrow {
+        display: none;
+    }
+
+    #kitchen-rescue-pak-landing .landing-top {
+        background-image: none;
+        height: auto;
+    }
+
+    #kitchen-rescue-pak-landing .landing-bottom .landing-form,
+    #kitchen-rescue-pak-landing .landing-bottom .landing-checkmarks {
+        position: relative;
+        width: 100%;
+        top: 0;
+        left: 0;
+    }
+}
