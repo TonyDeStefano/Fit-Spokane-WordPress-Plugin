@@ -131,8 +131,11 @@ p.pak-head small {
 
 @media screen and (max-width: 800px) {
 
-    #kitchen-rescue-pak-landing {
-        width: 100%;
+    #kitchen-rescue-pak-landing,
+    #kitchen-rescue-thanks {
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
     }
 
     p.pak-head {
