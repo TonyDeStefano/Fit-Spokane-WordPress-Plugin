@@ -17,7 +17,7 @@
 				</div>
 				<div class="col col-sm-7">
 
-					<h2>Key there!</h2>
+					<h2>Hey there!</h2>
 					<p>My name is Nikki Strong.</p>
 					<p>First of all, thank you for downloading my “Kitchen Rescue Pak”! I know you’ll find yourself using it constantly throughout your busy week.</p>
 					<p>This powerful series of three infographics take virtually ALL the guesswork out of creating the ideal eating habits to help you get and stay healthy for a lifetime!</p>
