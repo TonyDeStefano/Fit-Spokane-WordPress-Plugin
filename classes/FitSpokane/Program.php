@@ -39,36 +39,44 @@ class Program {
 		{
 			if ( $post = get_post( $this->id ) )
 			{
-				$this
-					->setId( $post->ID )
-					->setTitle( $post->post_title );
-
-				$custom = get_post_custom( $this->id );
-
-				if ( ! empty( $custom ) )
-				{
-					if ( isset( $custom[ self::PROP_IS_VISIBLE ] ) )
-					{
-						$this->setIsVisible( $custom[ self::PROP_IS_VISIBLE ][ 0 ] );
-					}
-
-					if ( isset( $custom[ self::PROP_PRICE ] ) )
-					{
-						$this->setPrice( $custom[ self::PROP_PRICE ][ 0 ] );
-					}
-
-					if ( isset( $custom[ self::PROP_IS_RECURRING ] ) )
-					{
-						$this->setIsRecurring( $custom[ self::PROP_IS_RECURRING ][ 0 ] );
-					}
-
-					if ( isset( $custom[ self::PROP_RECUR_PERIOD ] ) )
-					{
-						$this->setRecurPeriod( $custom[ self::PROP_RECUR_PERIOD ][ 0 ] );
-					}
-				}
+				$this->loadFromPost( $post );
 			}
 
+		}
+	}
+
+	/**
+	 * @param \WP_Post $post
+	 */
+	public function loadFromPost( \WP_Post $post )
+	{
+		$this
+			->setId( $post->ID )
+			->setTitle( $post->post_title );
+
+		$custom = get_post_custom( $this->id );
+
+		if ( ! empty( $custom ) )
+		{
+			if ( isset( $custom[ self::PROP_IS_VISIBLE ] ) )
+			{
+				$this->setIsVisible( $custom[ self::PROP_IS_VISIBLE ][ 0 ] );
+			}
+
+			if ( isset( $custom[ self::PROP_PRICE ] ) )
+			{
+				$this->setPrice( $custom[ self::PROP_PRICE ][ 0 ] );
+			}
+
+			if ( isset( $custom[ self::PROP_IS_RECURRING ] ) )
+			{
+				$this->setIsRecurring( $custom[ self::PROP_IS_RECURRING ][ 0 ] );
+			}
+
+			if ( isset( $custom[ self::PROP_RECUR_PERIOD ] ) )
+			{
+				$this->setRecurPeriod( $custom[ self::PROP_RECUR_PERIOD ][ 0 ] );
+			}
 		}
 	}
 
@@ -203,5 +211,35 @@ class Program {
 		$this->recur_period = is_numeric( $recur_period ) ? intval( $recur_period ) : 1;
 
 		return $this;
+	}
+
+	/**
+	 * @return Program[]
+	 */
+	public static function getAllPrograms()
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		$programs = array();
+
+		$query = new \WP_Query( array(
+			'post_type' => self::POST_TYPE,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'orderby' => 'title',
+			'order' => 'ASC'
+		));
+
+
+		while ( $query->have_posts() )
+		{
+			$query->the_post();
+			$program = new Program;
+			$program->loadFromPost( $post );
+			$programs[ $program->getId() ] = $program;
+		}
+
+		return $programs;
 	}
 }

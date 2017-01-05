@@ -3,6 +3,19 @@
 @-ms-viewport {
     width: device-width;
 }
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
 .visible-xs,
 .visible-sm,
 .visible-md,

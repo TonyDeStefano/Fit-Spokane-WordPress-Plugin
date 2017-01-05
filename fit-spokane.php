@@ -29,6 +29,7 @@
 require_once ( 'classes/FitSpokane/Controller.php' );
 require_once ( 'classes/FitSpokane/Program.php' );
 require_once ( 'classes/FitSpokane/Payment.php' );
+require_once ( 'classes/FitSpokane/Coupon.php' );
 require_once ( 'classes/Stripe/init.php' );
 
 /* controller object */
@@ -61,21 +62,33 @@ if (is_admin() )
 	/* admin scripts */
 	add_action( 'admin_init', array( $fit_spokane_controller, 'admin_scripts' ) );
 
-	/* create custom attributes for post type */
+	/* create custom attributes for program post type */
 	add_action( 'add_meta_boxes_' . \FitSpokane\Program::POST_TYPE , array( $fit_spokane_controller, 'extra_program_meta' ) );
+
+	/* create custom attributes for coupon post type */
+	add_action( 'add_meta_boxes_' . \FitSpokane\Coupon::POST_TYPE , array( $fit_spokane_controller, 'extra_coupon_meta' ) );
 
 	/* remove the "view" action from the custom post type */
 	add_filter( 'post_row_actions', array( $fit_spokane_controller, 'remove_row_actions' ), 10, 1 );
 	add_filter('post_updated_messages', array( $fit_spokane_controller, 'custom_post_type_messages' ) );
 	
-	/* custom columns */
+	/* custom program columns */
 	add_filter( 'manage_' . \FitSpokane\Program::POST_TYPE . '_posts_columns', array( $fit_spokane_controller, 'add_new_program_columns' ) );
 	add_action( 'manage_' . \FitSpokane\Program::POST_TYPE . '_posts_custom_column' , array( $fit_spokane_controller, 'custom_program_columns' ) );
 	add_filter( 'manage_' . \FitSpokane\Payment::POST_TYPE . '_posts_columns', array( $fit_spokane_controller, 'add_new_payment_columns' ) );
 	add_action( 'manage_' . \FitSpokane\Payment::POST_TYPE . '_posts_custom_column' , array( $fit_spokane_controller, 'custom_payment_columns' ) );
 
-	/* Save meta */
+	/* Save program meta */
 	add_action( 'save_post', array( $fit_spokane_controller, 'save_program_meta' ), 10, 2 );
+
+	/* custom coupon columns */
+	add_filter( 'manage_' . \FitSpokane\Coupon::POST_TYPE . '_posts_columns', array( $fit_spokane_controller, 'add_new_coupon_columns' ) );
+	add_action( 'manage_' . \FitSpokane\Coupon::POST_TYPE . '_posts_custom_column' , array( $fit_spokane_controller, 'custom_coupon_columns' ) );
+	add_filter( 'manage_' . \FitSpokane\Coupon::POST_TYPE . '_posts_columns', array( $fit_spokane_controller, 'add_new_coupon_columns' ) );
+	add_action( 'manage_' . \FitSpokane\Coupon::POST_TYPE . '_posts_custom_column' , array( $fit_spokane_controller, 'custom_coupon_columns' ) );
+
+	/* Save coupon meta */
+	add_action( 'save_post', array( $fit_spokane_controller, 'save_coupon_meta' ), 10, 2 );
 
 	/* add the instructions page link */
 	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $fit_spokane_controller, 'instructions_link' ) );

@@ -338,6 +338,8 @@ class Controller {
 	 */
 	public function create_post_type()
 	{
+		/* PROGRAM */
+
 		$title = __( 'Program', 'fit-spokane' );
 		$plural = __( 'Programs', 'fit-spokane' );
 
@@ -368,6 +370,8 @@ class Controller {
 
 		register_post_type( Program::POST_TYPE , $args );
 
+		/* PAYMENT */
+
 		$title = __( 'Payment', 'fit-spokane' );
 		$plural = __( 'Payments', 'fit-spokane' );
 
@@ -397,6 +401,38 @@ class Controller {
 		);
 
 		register_post_type( Payment::POST_TYPE , $args );
+
+		/* COUPON */
+
+		$title = __( 'Coupon', 'fit-spokane' );
+		$plural = __( 'Coupons', 'fit-spokane' );
+
+		$labels = array (
+			'name' => $plural,
+			'singular_name' => $plural,
+			'add_new_item' => __( 'Add New', 'fit-spokane' ) . ' ' . $title,
+			'edit_item' => __( 'Edit', 'fit-spokane' ) . ' ' . $title,
+			'new_item' => __( 'New', 'fit-spokane' ) . ' ' . $title,
+			'view_item' => __( 'View', 'fit-spokane' ) . ' ' . $title,
+			'search_items' => __( 'Search', 'fit-spokane' ) . ' ' . $plural,
+			'not_found' => __( 'No', 'fit-spokane' ) . ' ' . $plural . ' ' . __( 'Found', 'fit-spokane'  )
+		);
+
+		$args = array (
+			'labels' => $labels,
+			'hierarchical' => FALSE,
+			'description' => $plural,
+			'supports' => array( 'title' ),
+			'show_ui' => TRUE,
+			'show_in_menu' => 'fit_spokane',
+			'show_in_nav_menus' => TRUE,
+			'publicly_queryable' => TRUE,
+			'exclude_from_search' => FALSE,
+			'has_archive' => TRUE,
+			'public' => FALSE
+		);
+
+		register_post_type( Coupon::POST_TYPE , $args );
 	}
 
 	/**
@@ -512,6 +548,107 @@ class Controller {
 		}
 	}
 
+	///
+
+	public function extra_coupon_meta()
+	{
+		add_meta_box( 'fit-spokane-program-meta', 'Coupon Info', array( $this, 'extra_coupon_fields'), Coupon::POST_TYPE );
+	}
+
+	public function extra_coupon_fields()
+	{
+		include( dirname( dirname( __DIR__ ) ) . '/includes/extra-coupon-fields.php' );
+	}
+
+	public function save_coupon_meta()
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		if ( $post )
+		{
+			if ( $post->post_type == Coupon::POST_TYPE )
+			{
+				$code = trim( $_POST['code'] );
+				if ( strlen( $code ) == 0 )
+				{
+					$code = 'COUPON' . $post->ID;
+				}
+
+				$program_ids = array();
+
+				if ( isset( $_POST['program_id_0'] ) )
+				{
+					$program_ids = array( 0 );
+				}
+				else
+				{
+					foreach ( $_POST as $key => $val )
+					{
+						if ( substr( $key, 0, strlen( 'program_id_' ) ) == 'program_id_' )
+						{
+							$program_ids[] = $val;
+						}
+					}
+				}
+
+				$coupon = new Coupon( $post->ID );
+				$coupon
+					->setCode( $code )
+					->setAmountOff( $_POST['amount_off'] )
+					->setPercentOff( $_POST['percent_off'] )
+					->setStartsAt( $_POST['starts_at'] )
+					->setEndsAt( $_POST['ends_at'] )
+					->setProgramIds( $program_ids )
+					->update();
+			}
+		}
+	}
+
+	public function add_new_coupon_columns( $columns )
+	{
+		$new = array(
+			'code' => 'Coupon Code',
+			'discount' => 'Discount',
+			'dates' => 'Valid Dates',
+			'valid' => 'Valid Now?'
+		);
+
+		unset( $columns['date'] );
+
+		$columns = array_slice( $columns, 0, 2, TRUE ) + $new + array_slice( $columns, 2, NULL, TRUE );
+		return $columns;
+	}
+
+	public function custom_coupon_columns( $column )
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		$coupon = new Coupon( $post->ID );
+
+		switch ( $column )
+		{
+			case 'code':
+				echo $coupon->getCode();
+				break;
+
+			case 'discount':
+				echo $coupon->getDiscountText();
+				break;
+
+			case 'dates':
+				echo $coupon->getValidDates();
+				break;
+
+			case 'valid':
+				echo ( $coupon->isValidNow() ) ? 'Yes' : 'No';
+				break;
+		}
+	}
+
+	///
+
 	/**
 	 * @param array $actions
 	 *
@@ -519,7 +656,7 @@ class Controller {
 	 */
 	public function remove_row_actions( $actions )
 	{
-		if ( get_post_type() == Program::POST_TYPE )
+		if ( get_post_type() == Program::POST_TYPE || get_post_type() == Coupon::POST_TYPE )
 		{
 			unset( $actions['view'] );
 		}
@@ -537,6 +674,10 @@ class Controller {
 		if ( get_post_type() == Program::POST_TYPE )
 		{
 			$messages['post'][1] = 'Program has been updated! <a href="edit.php?post_type=fit_spokane_program">Back to List</a>';
+		}
+		elseif ( get_post_type() == Coupon::POST_TYPE )
+		{
+			$messages['post'][1] = 'Coupon has been updated! <a href="edit.php?post_type=fit_spokane_coupon">Back to List</a>';
 		}
 
 		return $messages;
