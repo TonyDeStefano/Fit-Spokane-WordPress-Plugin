@@ -17,6 +17,8 @@ class Program {
 	private $is_visible = FALSE;
 	private $is_recurring = FALSE;
 	private $recur_period;
+	private $coupon_id;
+	private $original_price;
 
 	/**
 	 * Program constructor.
@@ -214,6 +216,46 @@ class Program {
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function getCouponId()
+	{
+		return $this->coupon_id;
+	}
+
+	/**
+	 * @param mixed $coupon_id
+	 *
+	 * @return Program
+	 */
+	public function setCouponId( $coupon_id )
+	{
+		$this->coupon_id = ( is_numeric( $coupon_id ) ) ? intval( $coupon_id ) : NULL;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getOriginalPrice()
+	{
+		return ( $this->original_price === NULL || $this->coupon_id === NULL ) ? $this->getPrice() : $this->original_price;
+	}
+
+	/**
+	 * @param mixed $original_price
+	 *
+	 * @return Program
+	 */
+	public function setOriginalPrice( $original_price )
+	{
+		$this->original_price = ( is_numeric( $original_price ) ) ? $original_price : NULL;
+
+		return $this;
+	}
+
+	/**
 	 * @return Program[]
 	 */
 	public static function getAllPrograms()
@@ -241,5 +283,30 @@ class Program {
 		}
 
 		return $programs;
+	}
+
+	/**
+	 * @param Coupon $coupon
+	 */
+	public function applyCoupon( Coupon $coupon )
+	{
+		if ( $coupon->getId() !== NULL )
+		{
+			$new_price = $this->price;
+
+			if ( $coupon->getAmountOff() > 0 )
+			{
+				$new_price -= $coupon->getAmountOff();
+			}
+			else
+			{
+				$new_price = round( $new_price * ( 100 - $coupon->getPercentOff() ), 2 );
+			}
+
+			$this
+				->setCouponId( $coupon->getId() )
+				->setOriginalPrice( $this->price )
+				->setPrice( $new_price );
+		}
 	}
 }

@@ -54,6 +54,27 @@ class Controller {
 	}
 
 	/**
+	 * @param string $content
+	 *
+	 * @return string
+	 */
+	public function show_only_short_code( $content )
+	{
+		if ( isset( $_GET['fit_spokane_program_id'] ) )
+		{
+			$regex = get_shortcode_regex();
+			preg_match_all( '/' . $regex . '/', $content, $matches );
+
+			if ( ! empty( $matches[0] ) )
+			{
+				$content = do_shortcode( implode( ' ', $matches[0] ) );
+			}
+		}
+
+		return $content;
+	}
+
+	/**
 	 * @param $attribute
 	 *
 	 * @return string
@@ -279,12 +300,26 @@ class Controller {
 							) );
 						}
 
+						$coupon = new Coupon;
+						if ( isset ( $_POST['coupon_id'] ) )
+						{
+							$coupon
+								->setId( $_POST['coupon_id'] )
+								->read();
+
+							if ( $coupon->getId() !== NULL )
+							{
+								$program->applyCoupon( $coupon );
+							}
+						}
+
 						$content = '
 							<p>
 								<strong>Customer:</strong><br>' . $name . '<br><br>
 								<strong>Email:</strong><br>' . $email . '<br><br>
 								<strong>Address:</strong><br>' . $address . '<br>' . $city . ', ' . $state . ' ' . $zip . '<br><br>
 								<strong>Program:</strong><br>' . $program->getTitle() . '<br><br>
+								<strong>Coupon:</strong><br>' . ( ( $program->getCouponId() === NULL ) ? 'None' : $coupon->getCode() ) . '<br><br>
 								<strong>Price:</strong><br>$' . number_format( $program->getPrice(), 2 ) . '<br><br>
 								<strong>Recurring:</strong><br>' . ( ( $program->isRecurring() && $program->getRecurPeriod() > 1 ) ? 'Every ' . $program->getRecurPeriod() . ' months' : 'No' ) . '
 							</p>';
@@ -529,7 +564,7 @@ class Controller {
 			'expires_at' => 'Expiration Date'
 		);
 
-		unset( $columns['date'] );
+		//unset( $columns['date'] );
 
 		$columns = array_slice( $columns, 0, 2, TRUE ) + $new + array_slice( $columns, 2, NULL, TRUE );
 		return $columns;

@@ -2,7 +2,7 @@
 
 namespace FitSpokane\Stripe\Util;
 
-use Stripe\StripeObject;
+use FitSpokane\Stripe\StripeObject;
 
 abstract class Util
 {
@@ -64,39 +64,39 @@ abstract class Util
     public static function convertToStripeObject($resp, $opts)
     {
         $types = array(
-            'account' => 'Stripe\\Account',
-            'alipay_account' => 'Stripe\\AlipayAccount',
-            'apple_pay_domain' => 'Stripe\\ApplePayDomain',
-            'bank_account' => 'Stripe\\BankAccount',
-            'balance_transaction' => 'Stripe\\BalanceTransaction',
-            'card' => 'Stripe\\Card',
-            'charge' => 'Stripe\\Charge',
-            'country_spec' => 'Stripe\\CountrySpec',
-            'coupon' => 'Stripe\\Coupon',
-            'customer' => 'Stripe\\Customer',
-            'dispute' => 'Stripe\\Dispute',
-            'list' => 'Stripe\\Collection',
-            'invoice' => 'Stripe\\Invoice',
-            'invoiceitem' => 'Stripe\\InvoiceItem',
-            'event' => 'Stripe\\Event',
-            'file' => 'Stripe\\FileUpload',
-            'token' => 'Stripe\\Token',
-            'transfer' => 'Stripe\\Transfer',
-            'transfer_reversal' => 'Stripe\\TransferReversal',
-            'order' => 'Stripe\\Order',
-            'order_return' => 'Stripe\\OrderReturn',
-            'plan' => 'Stripe\\Plan',
-            'product' => 'Stripe\\Product',
-            'recipient' => 'Stripe\\Recipient',
-            'refund' => 'Stripe\\Refund',
-            'sku' => 'Stripe\\SKU',
-            'source' => 'Stripe\\Source',
-            'subscription' => 'Stripe\\Subscription',
-            'subscription_item' => 'Stripe\\SubscriptionItem',
-            'three_d_secure' => 'Stripe\\ThreeDSecure',
-            'fee_refund' => 'Stripe\\ApplicationFeeRefund',
-            'bitcoin_receiver' => 'Stripe\\BitcoinReceiver',
-            'bitcoin_transaction' => 'Stripe\\BitcoinTransaction',
+            'account' => 'FitSpokane\\Stripe\\Account',
+            'alipay_account' => 'FitSpokane\\Stripe\\AlipayAccount',
+            'apple_pay_domain' => 'FitSpokane\\Stripe\\ApplePayDomain',
+            'bank_account' => 'FitSpokane\\Stripe\\BankAccount',
+            'balance_transaction' => 'FitSpokane\\Stripe\\BalanceTransaction',
+            'card' => 'FitSpokane\\Stripe\\Card',
+            'charge' => 'FitSpokane\\Stripe\\Charge',
+            'country_spec' => 'FitSpokane\\Stripe\\CountrySpec',
+            'coupon' => 'FitSpokane\\Stripe\\Coupon',
+            'customer' => 'FitSpokane\\Stripe\\Customer',
+            'dispute' => 'FitSpokane\\Stripe\\Dispute',
+            'list' => 'FitSpokane\\Stripe\\Collection',
+            'invoice' => 'FitSpokane\\Stripe\\Invoice',
+            'invoiceitem' => 'FitSpokane\\Stripe\\InvoiceItem',
+            'event' => 'FitSpokane\\Stripe\\Event',
+            'file' => 'FitSpokane\\Stripe\\FileUpload',
+            'token' => 'FitSpokane\\Stripe\\Token',
+            'transfer' => 'FitSpokane\\Stripe\\Transfer',
+            'transfer_reversal' => 'FitSpokane\\Stripe\\TransferReversal',
+            'order' => 'FitSpokane\\Stripe\\Order',
+            'order_return' => 'FitSpokane\\Stripe\\OrderReturn',
+            'plan' => 'FitSpokane\\Stripe\\Plan',
+            'product' => 'FitSpokane\\Stripe\\Product',
+            'recipient' => 'FitSpokane\\Stripe\\Recipient',
+            'refund' => 'FitSpokane\\Stripe\\Refund',
+            'sku' => 'FitSpokane\\Stripe\\SKU',
+            'source' => 'FitSpokane\\Stripe\\Source',
+            'subscription' => 'FitSpokane\\Stripe\\Subscription',
+            'subscription_item' => 'FitSpokane\\Stripe\\SubscriptionItem',
+            'three_d_secure' => 'FitSpokane\\Stripe\\ThreeDSecure',
+            'fee_refund' => 'FitSpokane\\Stripe\\ApplicationFeeRefund',
+            'bitcoin_receiver' => 'FitSpokane\\Stripe\\BitcoinReceiver',
+            'bitcoin_transaction' => 'FitSpokane\\Stripe\\BitcoinTransaction',
         );
         if (self::isList($resp)) {
             $mapped = array();
@@ -108,7 +108,7 @@ abstract class Util
             if (isset($resp['object']) && is_string($resp['object']) && isset($types[$resp['object']])) {
                 $class = $types[$resp['object']];
             } else {
-                $class = 'Stripe\\StripeObject';
+                $class = 'FitSpokane\\Stripe\\StripeObject';
             }
             return $class::constructFrom($resp, $opts);
         } else {

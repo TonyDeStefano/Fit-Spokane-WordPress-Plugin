@@ -2,7 +2,7 @@
 
 namespace FitSpokane\Stripe\Util;
 
-use Stripe\Error;
+use FitSpokane\Stripe\Error;
 
 class RequestOptions
 {

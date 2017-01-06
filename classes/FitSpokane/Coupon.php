@@ -356,7 +356,7 @@ class Coupon {
 
 		foreach ( $coupons as $coupon )
 		{
-			if ( $coupon->getCode() == $code )
+			if ( strtolower( $coupon->getCode() ) == strtolower( $code ) )
 			{
 				return $coupon;
 			}
@@ -372,7 +372,7 @@ class Coupon {
 	{
 		if ( $this->getAmountOff() > 0 )
 		{
-			return '$' . number_format( $this->getPercentOff(), 2 ) . ' off';
+			return '$' . number_format( $this->getAmountOff(), 2 ) . ' off';
 		}
 		else
 		{
@@ -395,6 +395,9 @@ class Coupon {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isValidNow()
 	{
 		if ( $this->starts_at === NULL && $this->ends_at === NULL )
@@ -418,5 +421,15 @@ class Coupon {
 		}
 
 		return FALSE;
+	}
+
+	/**
+	 * @param $program_id
+	 *
+	 * @return bool
+	 */
+	public function isValidForThisProgramId( $program_id )
+	{
+		return ( $this->isValidForAllPrograms() || in_array( $program_id, $this->program_ids ) );
 	}
 }

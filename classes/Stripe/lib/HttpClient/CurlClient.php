@@ -2,9 +2,9 @@
 
 namespace FitSpokane\Stripe\HttpClient;
 
-use Stripe\Stripe;
-use Stripe\Error;
-use Stripe\Util;
+use FitSpokane\Stripe\Stripe;
+use FitSpokane\Stripe\Error;
+use FitSpokane\Stripe\Util;
 
 // cURL constants are not defined in PHP < 5.5
 

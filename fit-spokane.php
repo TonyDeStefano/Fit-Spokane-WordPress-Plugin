@@ -45,10 +45,13 @@ add_action( 'init', array( $fit_spokane_controller, 'init' ) );
 add_action( 'init', array( $fit_spokane_controller, 'create_post_type' ) );
 
 /* capture form post */
-add_action ( 'init', array( $fit_spokane_controller, 'form_capture' ) );
+add_action( 'init', array( $fit_spokane_controller, 'form_capture' ) );
 
 /* register shortcode */
-add_shortcode ( 'fit_spokane', array( $fit_spokane_controller, 'short_code' ) );
+add_shortcode( 'fit_spokane', array( $fit_spokane_controller, 'short_code' ) );
+
+/* show only shortcode in certain instances (remove content) */
+add_filter( 'the_content', array( $fit_spokane_controller, 'show_only_short_code' ) );
 
 /* admin stuff */
 if (is_admin() )
