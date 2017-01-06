@@ -62,11 +62,20 @@ class Controller {
 	{
 		if ( isset( $_GET['fit_spokane_program_id'] ) )
 		{
-			$regex = get_shortcode_regex();
+			//$regex = get_shortcode_regex();
+			$regex = '\[fit_spokane(.*?)\]';
 			preg_match_all( '/' . $regex . '/', $content, $matches );
 
 			if ( ! empty( $matches[0] ) )
 			{
+				foreach ( $matches[0] as $index => $match )
+				{
+					if ( substr( $match, 0, strlen( '[fit_spokane' ) ) !== '[fit_spokane' )
+					{
+						unset( $matches[0][ $index ] );
+					}
+				}
+
 				$content = do_shortcode( implode( ' ', $matches[0] ) );
 			}
 		}

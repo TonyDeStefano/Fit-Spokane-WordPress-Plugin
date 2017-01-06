@@ -300,7 +300,7 @@ class Program {
 			}
 			else
 			{
-				$new_price = round( $new_price * ( 100 - $coupon->getPercentOff() ), 2 );
+				$new_price = round( $new_price * ( ( 100 - $coupon->getPercentOff() ) / 100 ), 2 );
 			}
 
 			$this
