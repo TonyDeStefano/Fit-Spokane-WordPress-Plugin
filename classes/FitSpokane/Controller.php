@@ -244,7 +244,7 @@ class Controller {
 					$http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 					curl_close( $ch );
 
-					if( $http_code == 200 )
+					if ( $http_code == 200 )
 					{
 						$referrer = $_POST['_wp_http_referer'];
 						$parts = explode( '?', $referrer );
@@ -256,6 +256,19 @@ class Controller {
 				elseif ( $_POST['fit_spokane_action'] == 'charge' )
 				{
 					$program = new Program( $_POST['id'] );
+					$coupon = new Coupon;
+
+					if ( isset( $_POST[ 'coupon_id' ] ) )
+					{
+						$coupon
+							->setId( $_POST['coupon_id'] )
+							->read();
+
+						if ( $coupon->getId() !== NULL )
+						{
+							$program->applyCoupon( $coupon );
+						}
+					}
 
 					$stripe_keys = self::getStripeKeys();
 					Stripe\Stripe::setApiKey( $stripe_keys['secret'] );
@@ -274,13 +287,13 @@ class Controller {
 						{
 							try
 							{
-								$plan = Stripe\Plan::retrieve( 'program-' . $program->getId() );
+								$plan = Stripe\Plan::retrieve( 'program-' . $program->getId() . '-' . round( $program->getPrice() * 100 ) );
 							}
 							catch ( \Exception $e )
 							{
 								$plan = Stripe\Plan::create( array (
-									'name' => $program->getTitle(),
-									'id' => 'program-' . $program->getId(),
+									'name' => $program->getTitle() . ' - $' . number_format( $program->getPrice(), 2 ),
+									'id' => 'program-' . $program->getId() . '-' . round( $program->getPrice() * 100 ),
 									'interval' => 'month',
 									'currency' => 'usd',
 									'amount' => $program->getPrice() * 100
@@ -307,19 +320,6 @@ class Controller {
 								'source' => $_POST['token'],
 								'description' => $program->getTitle()
 							) );
-						}
-
-						$coupon = new Coupon;
-						if ( isset ( $_POST['coupon_id'] ) )
-						{
-							$coupon
-								->setId( $_POST['coupon_id'] )
-								->read();
-
-							if ( $coupon->getId() !== NULL )
-							{
-								$program->applyCoupon( $coupon );
-							}
 						}
 
 						$content = '
